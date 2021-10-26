@@ -2,13 +2,11 @@ package sia.taco.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -16,12 +14,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import lombok.extern.slf4j.Slf4j;
 import sia.taco.data.IngredientRepository;
-import sia.taco.data.JdbcTacoRepository;
 import sia.taco.data.TacoRepository;
 import sia.taco.models.Ingredient;
 import sia.taco.models.Ingredient.Type;
@@ -38,7 +34,7 @@ public class DesignTacoController {
 	private TacoRepository designRepo;
 	 @Autowired
 	 public DesignTacoController(IngredientRepository ingredientRepo ,
-			 JdbcTacoRepository designRepo) 
+			 TacoRepository designRepo) 
 	 {
 	 this.ingredientRepo = ingredientRepo;
 	 this.designRepo = designRepo;
@@ -95,14 +91,13 @@ public class DesignTacoController {
 		 return "redirect:/design";
 		 }
 	
-	 
-	 
+	 log.info("submitted Taco: " + taco);
 	 
 	 Taco saved = designRepo.save(taco);
 	 order.addDesign(saved);
 	 
-	 /*log.info("submitted Taco: " + taco);
-	 log.info("saved Taco: " + saved);
+	/* log.info("submitted Taco: " + taco);
+	 //log.info("saved Taco: " + saved);
 	 log.info("modified order: " + order);*/
 	 model.addAttribute("order",order);
 	
