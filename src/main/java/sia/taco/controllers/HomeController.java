@@ -9,17 +9,17 @@ import sia.taco.data.UserRepository;
 @Controller
 public class HomeController {
 
-		@Autowired
-		UserRepository repo;
+		/*@Autowired
+		UserRepository repo;*/
 		@GetMapping("/")
 		public String home()
 		{
 			/*
 			 * it is the logical name of view
 			 * */
-			System.out.println("------------------------------");
+			/*System.out.println("------------------------------");
 			System.out.println(repo.findByUsername("a"));
-			System.out.println("------------------------------");
+			System.out.println("------------------------------");*/
 			return "home";
 		}
 }

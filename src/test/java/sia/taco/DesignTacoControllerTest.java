@@ -21,14 +21,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
+import org.springframework.security.test.context.support.WithMockUser;
 import sia.taco.controllers.DesignTacoController;
 import sia.taco.data.IngredientRepository;
 import sia.taco.data.OrderRepository;
 import sia.taco.data.TacoRepository;
+import sia.taco.data.UserRepository;
 import sia.taco.models.Ingredient;
 import sia.taco.models.Ingredient.Type;
 import sia.taco.models.Taco;
+import sia.taco.models.User;
 
 
 
@@ -51,6 +53,9 @@ public class DesignTacoControllerTest {
 
   @MockBean
   private OrderRepository orderRepository;
+  
+  @MockBean
+  private UserRepository userRepository;
 
   @Before
   public void setup() {
@@ -82,10 +87,14 @@ public class DesignTacoControllerTest {
             new Ingredient("GRBF", "Ground Beef", Type.PROTEIN),
             new Ingredient("CHED", "Cheddar", Type.CHEESE)
       ));
+    
+    when(userRepository.findByUsername("testuser"))
+	.thenReturn(new User("testuser", "testpass", "Test User", "123 Street", "Someville", "CO", "12345", "123-123-1234"));
 
   }
 
   @Test
+  @WithMockUser(username="testuser", password="testpass")
   public void testShowDesignForm() throws Exception {
     mockMvc.perform(get("/design"))
         .andExpect(status().isOk())
@@ -98,6 +107,7 @@ public class DesignTacoControllerTest {
   }
 
   @Test
+  @WithMockUser(username="testuser", password="testpass", authorities="ROLE_USER")
   public void processDesign() throws Exception {
     when(designRepository.save(design))
         .thenReturn(design);
